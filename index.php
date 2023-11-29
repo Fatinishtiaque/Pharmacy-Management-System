@@ -1,117 +1,132 @@
+<!-- For more projects: Visit codeastro.com  -->
 <?php
-error_reporting(1);
-session_start();
-include("dbcon.php");
-if(isset($_SESSION['user_session'])){
-  
-  $invoice_number="CA-".invoice_number();
-	header("location:home.php?invoice_number=$invoice_number");
-}
+ 
+    session_start();
 
-   if(isset($_POST['submit'])){  //******Login Form*******
-  $username =$_POST['username'];
+    if(!isset($_SESSION['user_session'])){
 
-  $password = $_POST['password'];
-
-  $password = sha1($password);
-
-  $select_sql = "SELECT * FROM users ";
-
-  $select_query = mysqli_query($con,$select_sql);
-   
-  if($select_query){
-
-  	while ($row =mysqli_fetch_array($select_query)) {
-  		$s_username = $row['user_name'];
-  		$s_password = $row['password'];
-  	}
-  }
-
- if($s_username == $username && $s_password == $password){
-          
-         $_SESSION['user_session'] = $s_username;
-         $invoice_number="CA-".invoice_number();
- 	       header("location:home.php?invoice_number=$invoice_number");
-
-
- }else{
- 	  	    $error_msg = "<center><font color='red'>Login Failed</font></center>";
- }
-
-}                  //******Login Form*******
-
-  function invoice_number(){   //********Outputting Random Number For Invoice Number********
-
-    $chars = "09302909209300923";
-
-    srand((double)microtime()*1000000);
-
-    $i = 1;
-
-    $pass = '';
-
-    while($i <=7){
-
-      $num  = rand()%10;
-      $tmp  = substr($chars, $num,1);
-      $pass = $pass.$tmp;
-      $i++;
+        header("location:../index.php");
     }
-    return $pass;
-                        //********Outputting Random Number For Invoice Number********
-  }                       
 ?>
 
-<!DOCTYPE html>
-<html>
-<!DOCTYPE html>
-<html>
-<head>
-<!-- For more projects: Visit codeastro.com  -->
-	<title>SPMS</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-  <link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="stylesheet" type="text/css" href="css/font-awesome.css">
-    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
-    
-</head>
 <body>
+ 	 	<form method="POST" action="register.php?invoice_number=<?php echo $_GET['invoice_number']?>">
+  	  	  <table id="table" style="width: 400px; margin: auto;overflow-x:auto; overflow-y: auto;">
+  	  	 <tr>
+         <td>Bar Code:</td>
+         <td><input type="text" name="bar_code" id="bar_code" size="10" placeholder="Set a bar code"></td>
+          </tr>
+          <tr id="row1">
+         <td>Medicine Name:</td>
+         <td><input type="text" name="med_name"  id="med_name" size="10" required ></td>
+        </tr>
+        <tr>
+                   <td>Category:</td>
 
-	<center>
-		<h1>Pharmacy Management System</h1>
-	</center>
+          <td><input type="text" name="category" id="category" size="10"  required></td>
+        </tr>
+        <tr>
+                   <td>Quantity:</td>
+        <!-- For more projects: Visit codeastro.com  -->
+        <td><input type="number" style="width: 95px;" name="quantity">
 
-	<div class="content" style="width: 400px">
+             <select style="width: 95px; height: 28px; border-color: #000080" name="sell_type" > 
+                 <option value="Bot">Bot</option>
+                 <option value="Stp">Stp</option>
+                  <option value="Tab">Tab</option>
+		 <option value="Sachet">Sachet</option>	
+		<option value="Unit">Unit</option>
+		<option value="Tube">Tube</option>
+                 </select></td>
+        
+        </tr> 
+        <tr>
+                   <td>Registered Date:</td>
 
-		<form method="POST">
+          <td><input type="date"  name="reg_date" id="reg_date" size="5"  required>  </td>
+        </tr>
+        <tr>
+                   <td>Expired Date:</td>
 
-		<table class="table table-bordered table-responsive " >
-			<tr>
-			  <td><label for="username">Usename</label></td>
-			  <td><input type="text" autocomplete="off" name="username" class="form-group" required></td>
-			</tr>
-			<tr>
-				<td><label for="password">Password</label></td>
-				<td><input type="password" name="password" required></td>
-			</tr>
-      <input type="hidden" aucomplete="off" name="invoice_number" value="<?php echo 'CA-'.invoice_number()?>">
+          <td><input type="date" name="exp_date" id="exp_date" size="5"  required></td>
+        </tr>
+        <tr>
+                   <td>Remark:</td>
 
-		</table>
-    
+          <td><input type="text" name="company" id="company" size="10"></td>
+        </tr>
+       
+          <tr>
+                     <td>Actual Price:</td>
 
-		<input type="submit" name="submit" class="btn btn-success btn-large" value="Login">
+          <td><input type="number" name="actual_price" id="actual_price"></td>
+        </tr>
+        <tr>
+                   <td>Selling Price:</td>
 
-    <?php echo $error_msg;?>
+          <td><input type="number" name="selling_price" id="selling_price"></td>
+        </tr>
+        <tr><!-- For more projects: Visit codeastro.com  -->
+                   <td>Profit:</td>
 
-	</form>
+          <td><input type="text" name="profit_price" id="profit_price"></td>
+        </tr>
 
-		
-  </div>
-  
-  
- 
+        <tr>
+          <td></td>
+          <td> <input type="submit" name="submit" class="btn btn-success btn-large" style="width: 225px" value="Save"> </td>
+        </tr>
+
+  	  	 </table> 
+        <br>
+  	  	 </form><br>
 </body>
+
+<script type="text/javascript">
+		$(document).ready(function(){
+
+      $(document).on('keyup','#med_name', 
+
+        function(){
+             var med_name_cap = $("#med_name").val();
+              
+              $("#med_name").val(med_name_cap.charAt(0).toUpperCase()+med_name_cap.slice(1));
+      
+        });
+
+
+      $(document).on('keyup','#category', 
+
+        function(){
+             var category_cap = $("#category").val();
+              
+              $("#category").val(category_cap.charAt(0).toUpperCase()+category_cap.slice(1));
+      
+        });
+
+
+      $(document).on('keyup','#actual_price', 
+
+        function(){
+             var act_price = $("#actual_price").val();
+      var sell_price = $("#selling_price").val();
+      var pro_price = parseInt(sell_price) - parseInt(act_price);
+	var percentage = Math.round((parseInt(pro_price)/parseInt(act_price))*100);
+	var output = pro_price.toString().concat("(")+percentage.toString().concat("%)");
+        $("#profit_price").val(output);
+        });
+
+       $(document).on('keyup','#selling_price', 
+        function(){
+      var act_price = $("#actual_price").val();
+      var sell_price = $("#selling_price").val();
+      var pro_price = parseInt(sell_price) - parseInt(act_price);
+	var percentage = Math.round((parseInt(pro_price)/parseInt(act_price))*100);
+	var output = pro_price.toString().concat("(")+percentage.toString().concat("%)");
+        $("#profit_price").val(output);
+            });
+});
+  	
+  </script>
 </html>
+<!-- For more projects: Visit codeastro.com  -->
